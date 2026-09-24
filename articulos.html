@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículos // RAM</title>
+    
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS y Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1B335A',
+                            navyDark: '#122340',
+                            blue: '#468ee5',
+                            bgMain: '#DCE4EE',
+                            cardWrapper: '#C9D6E4',
+                            cardBg: '#FFFFFF',
+                            textDark: '#1B335A',
+                            textMuted: '#64748B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #DCE4EE;
+            --card-bg: #FFFFFF;
+            --card-wrapper: #C9D6E4;
+            --header-bg: #1B335A;
+            --nav-dark: #122340;
+            --text-dark: #1B335A;
+            --text-muted: #64748B;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 48px 32px;
+            box-sizing: border-box;
+        }
+
+        /* Ocultar barras de desplazamiento */
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        html, body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .hero-banner {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 48px auto;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 38px;
+            line-height: 1.15;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .hero-banner p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 680px;
+        }
+
+        /* Contenedores con el mismo estilo de tarjetas envolventes */
+        .app-card-wrapper, .app-card-wrapper2, .app-card-wrapper3 {
+            background-color: #f5f8fc;
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 20px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(27, 51, 90, 0.05);
+        }
+
+        .box-art1, .box-art2, .box-art3 {
+            background-color: #a2afc2;
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 20px rgba(27, 51, 90, 0.05);
+        }
+
+        .grid-articles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 32px 28px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(27, 51, 90, 0.08);
+        }
+
+        .article-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            padding: 4px 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            background-color: var(--header-bg);
+            color: #FFFFFF;
+            border-radius: 50px;
+            margin-bottom: 16px;
+            align-self: flex-start;
+        }
+
+        .article-card .title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .article-card .desc {
+            font-size: 14.5px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--header-bg);
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+            align-self: flex-start;
+        }
+
+        .btn-link:hover {
+            background-color: var(--nav-dark);
+        }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 24px 16px; }
+            .hero-banner h1 { font-size: 28px; }
+            .app-card-wrapper, .app-card-wrapper2, .app-card-wrapper3 { padding: 16px; }
+            .box-art1, .box-art2, .box-art3 { padding: 16px; margin-bottom: 24px; }
+            .article-card { padding: 24px 20px; }
+            .grid-articles { gap: 16px; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bgMain text-brand-textDark font-sans min-h-screen flex flex-col justify-between overflow-x-hidden w-full">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (ANCHO COMPLETO) -->
+    <header class="sticky top-0 z-50 bg-brand-navy shadow-md w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo / Título de la Campaña -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow shrink-0">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block leading-tight">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1.5">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-container">
+
+        <!-- HEADER HERO -->
+        <div class="hero-banner">
+            <h1>Publicaciones Científicas y Ensayos Académicos</h1>
+            <p>
+                Explora las investigaciones y análisis técnicos más recientes sobre el impacto de la resistencia antimicrobiana y las futuras alternativas terapéuticas.
+            </p>
+        </div>
+
+        <!-- SECCIÓN 1: ARTÍCULOS OMS -->
+        <div class="box-art1">
+            <div class="app-card-wrapper">Artículos OMS</div>
+            <div class="grid-articles">
+                
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">Información</span>
+                        <div class="title">Resistencia antimicrobiana</div>
+                        <div class="desc">La resistencia antimicrobiana ocurre cuando los microbios dejan de responder a los medicamentos por su uso indebido o excesivo, haciendo que las infecciones sean difíciles o imposibles de tratar. Esta grave amenaza mundial incrementa las muertes y los costos de salud, por lo que la OMS exige promover la prevención y el uso responsable de fármacos.</div>
+                    </div>
+                    <img src="https://www.expomedhub.com/img/blog/resistencia-antimicrobiana-27.07.2020%20resistencia%20animicrobiana.jpg" alt="Resistencia Antimicrobiana">
+                    <a href="https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">Salud</span>
+                        <div class="title">Resistencia generalizada a antibióticos de uso habitual</div>
+                        <div class="desc">En 2023, una de cada seis infecciones bacterianas comunes en el mundo fue resistente a los antibióticos. La OMS advierte que esta resistencia aumentó en más del 40% de los patógenos monitoreados entre 2018 y 2023, afectando gravemente a tratamientos clave para infecciones urinarias, gastrointestinales y sanguíneas.</div>
+                    </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4AxTqrR9ZU2wTcLfkkp1xE4EdOqknbZ96V-mjYCNA5iqON_dZCf6fw2U&s=10" alt="Resistencia a antibióticos">
+                    <a href="https://www.who.int/es/news/item/13-10-2025-who-warns-of-widespread-resistance-to-common-antibiotics-worldwide" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: ARTÍCULOS LANCET -->
+        <div class="box-art2">
+            <div class="app-card-wrapper2">Artículos Lancet</div>
+            <div class="grid-articles">
+                
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">INVESTIGACIÓN</span>
+                        <div class="title">Avances y mecanismos de la resistencia a los antimicrobianos</div>
+                        <div class="desc">Un estudio en The Lancet Microbe destaca que la RAM causa más de 4.9 millones de muertes anuales debido al desarrollo de mecanismos bacterianos complejos. Para frenar la pérdida de eficacia de fármacos de última línea, los expertos urgen a acelerar la secuenciación genómica, el uso de inteligencia artificial y la creación de terapias no antibióticas.</div>
+                    </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0C8EUBxKn57OpRqoyG5WnN56Je5wy0jHZMEly05ku4QiVmrCLtuNHKHg&s=10" alt="Mecanismos de resistencia">
+                    <a href="https://www.thelancet.com/journals/lanmic/article/PIIS2666-5247(24)00200-3/fulltext" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">SALUD GLOBAL</span>
+                        <div class="title">Resistencia a los antimicrobianos: la pandemia oculta que no podemos ignorar</div>
+                        <div class="desc">La RAM se ha convertido en una preocupación urgente de salud pública mundial que costará billones a la economía para 2050. La OMS y la ONU promueven un plan global bajo el enfoque "Una Salud" para frenar la escasez de nuevos antibióticos, la transmisión agrícola y el impacto del cambio climático.</div>
+                    </div>
+                    <img src="https://tecscience.tec.mx/es/wp-content/uploads/sites/8/2024/09/2-1024x1024.jpg" alt="Pandemia oculta RAM">
+                    <a href="https://www.thelancet.com/journals/eclinm/article/PIIS2589-5370(26)00306-8/fulltext" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: MÁS ARTÍCULOS -->
+        <div class="box-art3">
+            <div class="app-card-wrapper3">Más artículos</div>
+            <div class="grid-articles">
+                
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">advertencia</span>
+                        <div class="title">Patógenos de Eskape</div>
+                        <div class="desc">Los patógenos ESKAPE son bacterias hospitalarias de máxima prioridad que evaden la acción de los antibióticos convencionales. Su alta resistencia a tratamientos de último recurso causa infecciones graves con una mortalidad superior al 50%.</div>
+                    </div>
+                    <img src="https://cloverbiosoft.com/wp-content/uploads/2019/12/Eskape_Poster.png" alt="Patógenos ESKAPE">
+                    <a href="https://www.bioversys.com/medical-needs/eskape-pathogens/" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <div class="article-card">
+                    <div>
+                        <span class="badge-pill">USO DE FÁRMACOS</span>
+                        <div class="title">Uso responsable de antibióticos</div>
+                        <div class="desc">El uso indebido de antibióticos para tratar infecciones víricas o sin prescripción acelera la resistencia bacteriana y destruye la microbiota. Esta pérdida de eficacia de los fármacos incrementa la gravedad y mortalidad de infecciones cotidianas, convirtiéndose en un grave riesgo para la salud pública.</div>
+                    </div>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUGBzjtty79z3dfieXQfOIvBHdvUHcJUG3lR8I1WE_q05ngOBALg0nSQE&s=10" alt="Uso responsable">
+                    <a href="https://cinfasalud.cinfa.com/p/uso-responsable-de-antibioticos/" target="_blank" class="btn-link">
+                        Leer Artículo
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="w-full relative z-10 border-t border-slate-300 py-6 text-center text-xs text-brand-textMuted bg-white/40 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Investigación Educativa</p>
+    </footer>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD -->
+    <script>
+        // Inicializar íconos Lucide
+        lucide.createIcons();
+
+        // Lógica del menú desplegable móvil
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>

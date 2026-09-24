@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directrices de Prevención - Resistencia Antimicrobiana</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- CSS & Tailwind Framework Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1c335a',
+                            navyDark: '#122340',
+                            blue: '#4a90e2',
+                            bg: '#d9e2ec',
+                            panel: '#ffffff',
+                            border: '#8ca2bf'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #d9e2ec;
+            --panel-bg: #ffffff;
+            --header-bg: #1c335a;
+            --nav-bg: #122340;
+            --panel-border: #8ca2bf;
+            --text-dark: #1c335a;
+            --text-muted: #5a738e;
+            --accent-blue: #4a90e2;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Ocultar barra de desplazamiento */
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .main-content {
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            flex: 1;
+        }
+
+        .card-custom {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-left: 4px solid var(--accent-blue);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(28, 51, 90, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(28, 51, 90, 0.12);
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-brand-navy font-sans min-h-screen flex flex-col justify-between overflow-x-hidden w-full">
+
+    <!-- Header / Menú de Navegación (Ancho Completo Superior) -->
+    <header class="w-full sticky top-0 z-50 bg-brand-navy shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow shrink-0">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block leading-tight">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Enlaces Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1.5">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Móvil Desplegable -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        
+        <!-- Encabezado de Sección -->
+        <div class="w-full mb-6">
+            <div class="flex items-center gap-2 mb-1">
+                <i data-lucide="shield-alert" class="w-6 h-6 text-brand-navy"></i>
+                <h2 class="font-heading text-xl sm:text-2xl font-extrabold text-brand-navy tracking-tight uppercase">
+                    Directrices Críticas de Prevención Biológica
+                </h2>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 font-medium">
+                Pautas esenciales para frenar la proliferación de cepas inmunes y proteger los ecosistemas microbiológicos.
+            </p>
+        </div>
+
+        <!-- Grid de Tarjetas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+            
+            <!-- 1. Regla de Oro -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="ban" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Regla de Oro: No Automedicarse
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    El uso inapropiado de antibióticos frente a infecciones virales destruye la microbiota sana y ejerce presión selectiva, forzando a las bacterias sobrevivientes a mutar genéticamente y volverse inmunes.
+                </p>
+            </div>
+
+            <!-- 2. Interacción Cruzada -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="microscope" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Interacción Cruzada (Hongos y Bacterias)
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    En entornos clínicos, los hongos oportunistas aprovechan la debilidad del sistema biológico cuando los antibióticos eliminan las barreras bacterianas competitivas. Cada tratamiento exige un diagnóstico exacto.
+                </p>
+            </div>
+
+            <!-- 3. Adherencia Total -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Adherencia Total al Tratamiento
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Interrumpir un esquema antibiótico antes de tiempo deja con vida a las cepas más resistentes, permitiéndoles multiplicarse, consolidar sus mecanismos de defensa y transmitir su resistencia.
+                </p>
+            </div>
+
+            <!-- 4. Diagnóstico Certero -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Diagnóstico Microbiano Certero
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Exigir análisis microbiológicos o antibiogramas previos evita el uso innecesario de espectro amplio, garantizando que se aplique un fármaco dirigido exclusivamente al agente patógeno identificado.
+                </p>
+            </div>
+
+            <!-- 5. Cero Reutilización -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="pill-bottle" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Cero Reutilización de Medicamentos
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Consumir dosis sobrantes de tratamientos pasados o compartidas por terceros expone al organismo a concentraciones subóptimas del fármaco, lo que acelera el desarrollo de súperbacterias.
+                </p>
+            </div>
+
+            <!-- 6. Inmunización Estratégica -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="syringe" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Inmunización Estratégica
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Mantener el esquema de vacunación al día reduce drásticamente la incidencia de infecciones primarias, minimizando el riesgo de complicaciones y la necesidad de recurrir a terapias farmacológicas.
+                </p>
+            </div>
+
+            <!-- 7. Profilaxis e Higiene -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Profilaxis e Higiene Biológica
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    El lavado riguroso de manos y la desinfección de entornos clínicos e higiénicos cortan la cadena de transmisión directa de bacterias mutadas entre huéspedes y colectivos vulnerables.
+                </p>
+            </div>
+
+            <!-- 8. Gestión de Desechos -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Gestión de Desechos Farmacéuticos
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Desechar medicamentos vencidos en contenedores especializados evita que los residuos con restos biológicamente activos contaminen fuentes hídricas y generen resistencia en el ambiente natural.
+                </p>
+            </div>
+
+            <!-- 9. Control en Agroindustria -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="wheat" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Control en Agroindustria y Veterinaria
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Restringir el uso de antibióticos profilácticos en la crianza de animales frena la selección masiva de bacterias resistentes que luego ingresan a la cadena alimenticia humana.
+                </p>
+            </div>
+
+            <!-- 10. Inocuidad Alimentaria -->
+            <div class="card-custom p-6">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-blue-50 text-brand-blue rounded-lg">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-heading text-base font-bold text-brand-blue tracking-wide uppercase">
+                        Inocuidad y Manejo Alimentario
+                    </h3>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                    Separar alimentos crudos de cocidos y asegurar la correcta cocción de cárnicos elimina cepas zoonóticas resistentes antes de que puedan colonizar el tracto digestivo humano.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full relative z-10 border-t border-brand-border py-6 text-center text-xs text-brand-navy bg-white/60 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Investigación Educativa</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Inicializar íconos Lucide
+        lucide.createIcons();
+
+        // Lógica del Menú Móvil
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>

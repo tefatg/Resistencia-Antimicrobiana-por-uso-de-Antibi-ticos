@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Tratamientos Microbianos</title>
+    
+    <!-- CSS & Tailwind Framework Setup -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Configuración Personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1c355e',       /* Azul marino oscuro */
+                            navyDark: '#132543',   /* Azul marino profundo */
+                            blue: '#468ee5',       /* Azul brillante */
+                            blueHover: '#3378d1',  /* Hover de botones */
+                            slateBg: '#dbe3ed',    /* Fondo claro */
+                            cardBg: '#cdd9e8',     /* Fondo marco carrusel */
+                            slideBg: '#ffffff',    /* Tarjetas blancas */
+                            textDark: '#1c355e',   /* Texto principal */
+                            textMuted: '#526685',  /* Texto secundario */
+                            border: '#8ca2bf'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #dbe3ed;
+            --panel-bg: #ffffff;
+            --header-bg: #1c355e;
+            --nav-bg: #132543;
+            --panel-border: #8ca2bf;
+            --text-dark: #1c355e;
+            --text-muted: #526685;
+            --accent-blue: #468ee5;
+            --accent-red: #c0392b;
+
+            --btn-orange: #d97706;
+            --btn-orange-hover: #b45309;
+            --btn-purple: #2d4a77;
+            --btn-purple-hover: #1c355e;
+            --btn-teal: #0d9488;
+            --btn-teal-hover: #0f766e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            user-select: none;
+        }
+
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        html, body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .main-container {
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1280px;
+        }
+
+        .game-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        @media (min-width: 1024px) {
+            .game-layout {
+                flex-direction: row-reverse;
+                align-items: flex-start;
+            }
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+        }
+
+        canvas {
+            background-color: #132543;
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            border: 3px solid var(--panel-border);
+            box-shadow: 0 10px 25px rgba(28, 53, 94, 0.2);
+        }
+
+        .game-hud {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hud-badge {
+            background: rgba(19, 37, 67, 0.88);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(140, 162, 191, 0.4);
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .health-bar-container {
+            width: 100px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .health-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: #2dd4bf;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Panel Lateral Izquierdo */
+        .controls-sidebar {
+            width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 1024px) {
+            .controls-sidebar {
+                width: 320px;
+                position: sticky;
+                top: 80px;
+            }
+        }
+
+        .scoreboard {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .score-box {
+            background: #f4f7fa;
+            border: 1px solid var(--panel-border);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-box-title {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .score-box-num {
+            font-size: 20px;
+            color: var(--header-bg);
+            font-weight: 900;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--header-bg);
+            padding: 10px 12px;
+            background-color: #f4f7fa;
+            border-radius: 10px;
+            border: 1px solid var(--panel-border);
+        }
+
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #8ca2bf; transition: .3s; border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px;
+            left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--accent-red); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-game {
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            font-size: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-game:hover { transform: translateY(-1px); }
+        .btn-game:active { transform: translateY(1px); box-shadow: none; }
+
+        .btn-antibiotic { background-color: var(--btn-orange); }
+        .btn-antiviral { background-color: var(--btn-purple); }
+        .btn-antifungal { background-color: var(--btn-teal); }
+        .btn-reset { background-color: #e2e8f0; color: var(--header-bg); border: 1px solid var(--panel-border); box-shadow: 0 3px 0 #cbd5e1; }
+
+        .doctor-tab-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            width: 90%;
+            max-width: 440px;
+            pointer-events: auto;
+        }
+
+        .doctor-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(28, 53, 94, 0.35);
+            border: 2px solid var(--panel-border);
+            animation: popIn 0.25s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .doctor-avatar {
+            width: 64px;
+            height: 64px;
+            background: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .game-overlay-panel {
+            position: absolute;
+            inset: 0;
+            background: rgba(19, 37, 67, 0.9);
+            backdrop-filter: blur(4px);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-brand-slateBg text-brand-navy font-sans min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR ESTRUCTURADA CÓMO EN INDEX.HTML -->
+    <header class="sticky top-0 z-50 bg-brand-navy shadow-md w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo / Título de la Campaña -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="w-full max-w-[1200px] mb-3 bg-white border border-brand-border rounded-xl p-3 shadow-sm flex flex-wrap justify-around items-center text-xs font-bold text-brand-navy gap-2">
+            <span class="uppercase text-[10px] tracking-wider text-slate-500">Guía de Campo:</span>
+            <div class="flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-emerald-600 inline-block border border-green-300"></span>
+                <span>Bacteria (Verde)</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-blue-500 inline-block"></span>
+                <span>Virus (Azul)</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full bg-teal-600 inline-block"></span>
+                <span>Hongo (Turquesa)</span>
+            </div>
+            <button onclick="showDoctorTab()" class="text-brand-blue hover:underline text-xs flex items-center gap-1 ml-auto">
+                <i data-lucide="help-circle" class="w-4 h-4"></i> Explicación Médica
+            </button>
+        </div>
+
+        <div class="game-layout">
+            
+            <div class="controls-sidebar">
+                
+                <div class="scoreboard">
+                    <div class="score-box">
+                        <span class="score-box-title"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Bacterias</span>
+                        <span id="count-bacteria" class="score-box-num">0</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-box-title"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Virus</span>
+                        <span id="count-virus" class="score-box-num">0</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-box-title"><span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span> Hongos</span>
+                        <span id="count-fungus" class="score-box-num">0</span>
+                    </div>
+                </div>
+
+                <div class="control-row">
+                    <div>
+                        <span>Mutación Bacteriana</span>
+                        <span id="failed-attempts-text" class="block text-[10px] text-red-600 font-normal">Intentos fallidos: 0/3</span>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="mutation-toggle" onchange="resetAttempts()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="action-group">
+                    <button class="btn-game btn-antibiotic" onclick="releaseMedication('antibiotico')">💊 Antibiótico</button>
+                    <button class="btn-game btn-antiviral" onclick="releaseMedication('antiviral')">🧪 Antiviral</button>
+                    <button class="btn-game btn-antifungal" onclick="releaseMedication('antifungico')">🍄 Antifúngico</button>
+                    <button class="btn-game btn-reset" onclick="initSimulation()">🔄 Reiniciar</button>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas" width="800" height="420"></canvas>
+                
+                <div class="game-hud">
+                    <div class="hud-badge">
+                        🏆 SCORE: <span id="game-score" class="text-amber-400 font-extrabold text-sm">0</span>
+                    </div>
+                    <div class="hud-badge">
+                        <span>SALUD DEL CULTIVO:</span>
+                        <div class="health-bar-container">
+                            <div id="health-bar" class="health-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="doctor-tab" class="doctor-tab-container">
+                    <div class="doctor-card text-center">
+                        <div id="doc-step-1">
+                            <div class="doctor-avatar">
+                                <span class="text-3xl">👨‍⚕️</span>
+                            </div>
+                            <h3 class="text-base font-extrabold text-brand-navy mb-1">Dr. MenteSana</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                                La <strong>Resistencia Antimicrobiana</strong> hace que los fármacos pierdan eficacia cuando las bacterias mutan por mal uso. ¡Usa el medicamento adecuado para cada microbio!
+                            </p>
+                            <button onclick="nextDocStep(2)" class="w-full bg-brand-blue text-white py-2 rounded-lg font-bold text-xs uppercase tracking-wider hover:bg-blue-600 transition">
+                                Ver Guía de Fármacos ➔
+                            </button>
+                        </div>
+
+                        <div id="doc-step-2" class="hidden">
+                            <h4 class="text-xs font-extrabold text-brand-navy mb-2 uppercase">Especificidad Farmacéutica</h4>
+                            <div class="space-y-1.5 mb-3 text-left text-[11px]">
+                                <div class="p-2 rounded bg-amber-50 border border-amber-200">
+                                    💊 <strong>Antibiótico:</strong> Solo destruye <strong>Bacterias</strong>.
+                                </div>
+                                <div class="p-2 rounded bg-blue-50 border border-blue-200">
+                                    🧪 <strong>Antiviral:</strong> Solo ataca <strong>Virus</strong>.
+                                </div>
+                                <div class="p-2 rounded bg-teal-50 border border-teal-200">
+                                    🍄 <strong>Antifúngico:</strong> Solo elimina <strong>Hongos</strong>.
+                                </div>
+                            </div>
+                            <button onclick="closeDoctorTab()" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-extrabold text-xs uppercase tracking-wider hover:bg-emerald-700 transition">
+                                ¡Entendido, Jugar! 🎮
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="victory-overlay" class="game-overlay-panel hidden">
+                    <span class="text-5xl mb-2">🎉</span>
+                    <h2 class="text-3xl font-extrabold text-amber-400 tracking-wider mb-1">VICTORY</h2>
+                    <p class="text-xs text-white max-w-sm mb-4">
+                        ¡Excelente trabajo clínico! Has eliminado todos los patógenos del cultivo aplicando los medicamentos adecuados.
+                    </p>
+                    <div class="text-sm font-bold text-white mb-4 bg-brand-navy/80 px-4 py-2 rounded-xl border border-brand-border">
+                        PUNTAJE FINAL: <span id="victory-score" class="text-amber-400 text-lg">0</span>
+                    </div>
+                    <button onclick="initSimulation()" class="bg-emerald-600 text-white px-6 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider hover:bg-emerald-700 transition shadow-lg">
+                        Jugar de Nuevo 🔄
+                    </button>
+                </div>
+
+                <div id="gameover-overlay" class="game-overlay-panel hidden">
+                    <span class="text-5xl mb-2">🦠⚡</span>
+                    <h2 class="text-3xl font-extrabold text-red-500 tracking-wider mb-1">GAME OVER</h2>
+                    <p class="text-xs text-slate-200 max-w-sm mb-4">
+                        <strong>¡Las bacterias han desarrollado súper-resistencia!</strong><br>
+                        Has intentado aplicar antibiótico 3 veces distintas sin éxito sobre cepas mutadas. El tratamiento ha fallado.
+                    </p>
+                    <button onclick="initSimulation()" class="bg-red-600 text-white px-6 py-2.5 rounded-xl font-extrabold text-xs uppercase tracking-wider hover:bg-red-700 transition shadow-lg">
+                        Reintentar Simulación 🔄
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="w-full border-t border-slate-300 py-6 text-center text-xs text-brand-textMuted bg-white/40 backdrop-blur mt-8">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Feria de Ciencias</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let bacteriaList = [];
+        let virusList = [];
+        let fungusList = [];
+        let medicationParticles = [];
+        let explosionParticles = [];
+        let floatingTexts = [];
+
+        let score = 0;
+        let comboCounter = 0;
+        let resistantAttempts = 0;
+        let canRegisterResistance = true;
+        let isGameOver = false;
+        let isGameWon = false;
+
+        canvas.addEventListener('contextmenu', event => event.preventDefault());
+
+        canvas.addEventListener('mousedown', (event) => {
+            if (isGameOver || isGameWon) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const mouseX = (event.clientX - rect.left) * scaleX;
+            const mouseY = (event.clientY - rect.top) * scaleY;
+
+            let hitStatic = false;
+            bacteriaList.forEach(b => {
+                if (b.alive && Math.hypot(mouseX - b.x, mouseY - b.y) < b.radius) hitStatic = true;
+            });
+
+            if (!hitStatic) {
+                if (event.shiftKey || event.button === 2) {
+                    if (fungusList.length < 20) {
+                        fungusList.push({ x: mouseX, y: mouseY, radius: 26, color: '#0d9488', alive: true, pulse: Math.random() * 10 });
+                        spawnFloatingText(mouseX, mouseY, "+1 HONGO", "#2dd4bf");
+                    }
+                } else {
+                    if (virusList.length < 30) {
+                        virusList.push({ x: mouseX, y: mouseY, radius: 18, color: '#4a90e2', alive: true });
+                        spawnFloatingText(mouseX, mouseY, "+1 VIRUS", "#60a5fa");
+                    }
+                }
+                updateCounters();
+            }
+        });
+
+        function nextDocStep(step) {
+            document.getElementById('doc-step-1').classList.add('hidden');
+            document.getElementById('doc-step-2').classList.remove('hidden');
+        }
+
+        function closeDoctorTab() {
+            document.getElementById('doctor-tab').classList.add('hidden');
+        }
+
+        function showDoctorTab() {
+            document.getElementById('doc-step-1').classList.remove('hidden');
+            document.getElementById('doc-step-2').classList.add('hidden');
+            document.getElementById('doctor-tab').classList.remove('hidden');
+        }
+
+        function resetAttempts() {
+            resistantAttempts = 0;
+            canRegisterResistance = true;
+            document.getElementById('failed-attempts-text').innerText = `Intentos fallidos: ${resistantAttempts}/3`;
+        }
+
+        function initSimulation() {
+            bacteriaList = [];
+            virusList = [];
+            fungusList = [];
+            medicationParticles = [];
+            explosionParticles = [];
+            floatingTexts = [];
+            score = 0;
+            comboCounter = 0;
+            resistantAttempts = 0;
+            canRegisterResistance = true;
+            isGameOver = false;
+            isGameWon = false;
+
+            document.getElementById('victory-overlay').classList.add('hidden');
+            document.getElementById('gameover-overlay').classList.add('hidden');
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('mutation-toggle').checked = false;
+            resetAttempts();
+
+            const bacPositions = [
+                {x: 140, y: 320, r: 38, col: '#27ae60'},
+                {x: 320, y: 120, r: 35, col: '#2e7d32'},
+                {x: 540, y: 160, r: 36, col: '#1e8449'},
+                {x: 680, y: 280, r: 35, col: '#27ae60'}
+            ];
+            bacPositions.forEach(p => {
+                bacteriaList.push({ x: p.x, y: p.y, radius: p.r, color: p.col, alive: true, pulse: Math.random() * 10 });
+            });
+
+            const virPositions = [
+                {x: 240, y: 230, r: 18, col: '#4a90e2'},
+                {x: 460, y: 220, r: 18, col: '#5c9ce6'},
+                {x: 180, y: 90,  r: 18, col: '#3b82f6'},
+                {x: 640, y: 70,  r: 18, col: '#4a90e2'}
+            ];
+            virPositions.forEach(p => {
+                virusList.push({ x: p.x, y: p.y, radius: p.r, color: p.col, alive: true });
+            });
+
+            const fungPositions = [
+                {x: 450, y: 320, r: 26, col: '#0d9488'},
+                {x: 330, y: 280, r: 24, col: '#0f766e'}
+            ];
+            fungPositions.forEach(p => {
+                fungusList.push({ x: p.x, y: p.y, radius: p.r, color: p.col, alive: true, pulse: Math.random() * 10 });
+            });
+
+            updateCounters();
+        }
+
+        function updateCounters() {
+            const b = bacteriaList.filter(b => b.alive).length;
+            const v = virusList.filter(v => v.alive).length;
+            const f = fungusList.filter(f => f.alive).length;
+
+            document.getElementById('count-bacteria').innerText = b;
+            document.getElementById('count-virus').innerText = v;
+            document.getElementById('count-fungus').innerText = f;
+
+            const currentTotal = b + v + f;
+            const healthBar = document.getElementById('health-bar');
+            if (healthBar) {
+                const percentage = Math.max(0, Math.min(100, 100 - (currentTotal / 12) * 100));
+                healthBar.style.width = percentage + '%';
+                if (percentage < 30) healthBar.style.backgroundColor = '#ef4444';
+                else if (percentage < 70) healthBar.style.backgroundColor = '#f59e0b';
+                else healthBar.style.backgroundColor = '#2dd4bf';
+            }
+
+            if (currentTotal === 0 && !isGameWon && !isGameOver) {
+                isGameWon = true;
+                document.getElementById('victory-score').innerText = score;
+                document.getElementById('victory-overlay').classList.remove('hidden');
+            }
+        }
+
+        function triggerGameOver() {
+            isGameOver = true;
+            document.getElementById('gameover-overlay').classList.remove('hidden');
+        }
+
+        function releaseMedication(type) {
+            if (isGameOver || isGameWon) return;
+
+            let color = '#f59e0b';
+            if (type === 'antiviral') color = '#60a5fa';
+            if (type === 'antifungico') color = '#2dd4bf';
+
+            canRegisterResistance = true;
+
+            for (let i = 0; i < 22; i++) {
+                medicationParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: -20,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: Math.random() * 2.5 + 2.5,
+                    size: 6,
+                    color: color,
+                    type: type
+                });
+            }
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 14; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3.5 + 1;
+                explosionParticles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    radius: Math.random() * 3.5 + 1.5,
+                    color: color,
+                    alpha: 1
+                });
+            }
+        }
+
+        function spawnFloatingText(x, y, text, color) {
+            floatingTexts.push({
+                x: x, y: y,
+                text: text,
+                color: color,
+                alpha: 1.0,
+                vy: -0.8
+            });
+        }
+
+        function addScore(points, x, y) {
+            comboCounter++;
+            const earned = points * (comboCounter > 3 ? 2 : 1);
+            score += earned;
+            document.getElementById('game-score').innerText = score;
+            spawnFloatingText(x, y, `+${earned} PTS`, "#fbbf24");
+        }
+
+        function update() {
+            if (isGameOver || isGameWon) return;
+
+            const isMutated = document.getElementById('mutation-toggle').checked;
+
+            explosionParticles.forEach((ep) => {
+                ep.x += ep.vx; ep.y += ep.vy; ep.alpha -= 0.025;
+            });
+            explosionParticles = explosionParticles.filter(ep => ep.alpha > 0);
+
+            floatingTexts.forEach((ft) => {
+                ft.y += ft.vy; ft.alpha -= 0.015;
+            });
+            floatingTexts = floatingTexts.filter(ft => ft.alpha > 0);
+
+            medicationParticles.forEach((p) => {
+                p.x += p.vx; p.y += p.vy;
+
+                bacteriaList.forEach(b => {
+                    if (!b.alive) return;
+                    let dist = Math.hypot(p.x - b.x, p.y - b.y);
+                    if (dist < b.radius) {
+                        if (p.type === 'antibiotico') {
+                            if (isMutated) {
+                                createExplosion(p.x, p.y, "#ef4444");
+                                spawnFloatingText(p.x, p.y, "RESISTENTE", "#ef4444");
+                                if (canRegisterResistance) {
+                                    resistantAttempts++;
+                                    canRegisterResistance = false;
+                                    document.getElementById('failed-attempts-text').innerText = `Intentos fallidos: ${resistantAttempts}/3`;
+                                    if (resistantAttempts >= 3) triggerGameOver();
+                                }
+                            } else {
+                                b.alive = false;
+                                createExplosion(b.x, b.y, b.color);
+                                addScore(100, b.x, b.y);
+                            }
+                        } else {
+                            spawnFloatingText(p.x, p.y, "INEFICAZ", "#94a3b8");
+                        }
+                        p.y = canvas.height + 100;
+                    }
+                });
+
+                virusList.forEach(v => {
+                    if (!v.alive) return;
+                    let dist = Math.hypot(p.x - v.x, p.y - v.y);
+                    if (dist < v.radius) {
+                        if (p.type === 'antiviral') {
+                            v.alive = false;
+                            createExplosion(v.x, v.y, v.color);
+                            addScore(150, v.x, v.y);
+                        } else {
+                            spawnFloatingText(p.x, p.y, "INEFICAZ", "#94a3b8");
+                        }
+                        p.y = canvas.height + 100;
+                    }
+                });
+
+                fungusList.forEach(f => {
+                    if (!f.alive) return;
+                    let dist = Math.hypot(p.x - f.x, p.y - f.y);
+                    if (dist < f.radius) {
+                        if (p.type === 'antifungico') {
+                            f.alive = false;
+                            createExplosion(f.x, f.y, f.color);
+                            addScore(120, f.x, f.y);
+                        } else {
+                            spawnFloatingText(p.x, p.y, "INEFICAZ", "#94a3b8");
+                        }
+                        p.y = canvas.height + 100;
+                    }
+                });
+            });
+
+            medicationParticles = medicationParticles.filter(p => p.y <= canvas.height + 10);
+
+            updateCounters();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const isMutated = document.getElementById('mutation-toggle').checked;
+
+            // BACTERIAS: Forma de cápsula/óvalo con pili/cilios
+            bacteriaList.forEach(b => {
+                if (!b.alive) return;
+                b.pulse += 0.05;
+                let scale = 1 + Math.sin(b.pulse) * 0.05;
+
+                ctx.save();
+                ctx.translate(b.x, b.y);
+                ctx.scale(scale, scale);
+
+                // Pili / Flagelos
+                ctx.strokeStyle = isMutated ? 'rgba(239, 68, 68, 0.4)' : 'rgba(74, 222, 128, 0.4)';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 8; i++) {
+                    let angle = (i / 8) * Math.PI * 2 + b.pulse * 0.2;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.cos(angle) * (b.radius - 5), Math.sin(angle) * (b.radius - 5));
+                    ctx.lineTo(Math.cos(angle) * (b.radius + 10), Math.sin(angle) * (b.radius + 10));
+                    ctx.stroke();
+                }
+
+                // Cuerpo de cápsula
+                ctx.beginPath();
+                ctx.ellipse(0, 0, b.radius, b.radius * 0.65, Math.PI / 4, 0, Math.PI * 2);
+                ctx.fillStyle = isMutated ? '#c0392b' : b.color;
+                ctx.fill();
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = isMutated ? '#f87171' : '#a7f3d0';
+                ctx.stroke();
+
+                // Detalle interno (nucleoide)
+                ctx.beginPath();
+                ctx.ellipse(-5, -2, b.radius * 0.4, b.radius * 0.2, Math.PI / 4, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+                ctx.fill();
+
+                ctx.restore();
+            });
+
+            // VIRUS: Esfera con espículas/spikes
+            virusList.forEach(v => {
+                if (!v.alive) return;
+
+                ctx.save();
+                ctx.translate(v.x, v.y);
+
+                // Espículas / Glicoproteínas
+                ctx.strokeStyle = '#60a5fa';
+                ctx.lineWidth = 3;
+                for (let i = 0; i < 10; i++) {
+                    let angle = (i / 10) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(Math.cos(angle) * (v.radius + 7), Math.sin(angle) * (v.radius + 7));
+                    ctx.stroke();
+
+                    // Cabeza de la espícula
+                    ctx.beginPath();
+                    ctx.arc(Math.cos(angle) * (v.radius + 7), Math.sin(angle) * (v.radius + 7), 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#93c5fd';
+                    ctx.fill();
+                }
+
+                // Cuerpo central
+                ctx.beginPath();
+                ctx.arc(0, 0, v.radius, 0, Math.PI * 2);
+                ctx.fillStyle = v.color;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#bfdbfe';
+                ctx.stroke();
+
+                ctx.restore();
+            });
+
+            // HONGOS: Célula fúngica redondeada con pared gruesa y esporas
+            fungusList.forEach(f => {
+                if (!f.alive) return;
+                f.pulse += 0.03;
+                let pulseR = f.radius + Math.sin(f.pulse) * 1.5;
+
+                ctx.save();
+                ctx.translate(f.x, f.y);
+
+                // Cuerpo principal
+                ctx.beginPath();
+                ctx.arc(0, 0, pulseR, 0, Math.PI * 2);
+                ctx.fillStyle = f.color;
+                ctx.fill();
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#14b8a6';
+                ctx.stroke();
+
+                // Esporas/puntos internos
+                ctx.fillStyle = '#99f6e4';
+                const dots = [
+                    {x: -7, y: -6, r: 3.5},
+                    {x: 6, y: -4, r: 4},
+                    {x: -2, y: 7, r: 3},
+                    {x: 7, y: 6, r: 2.5}
+                ];
+                dots.forEach(d => {
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.restore();
+            });
+
+            // Partículas y efectos
+            medicationParticles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+
+            explosionParticles.forEach(ep => {
+                ctx.save();
+                ctx.globalAlpha = ep.alpha;
+                ctx.beginPath();
+                ctx.arc(ep.x, ep.y, ep.radius, 0, Math.PI * 2);
+                ctx.fillStyle = ep.color;
+                ctx.fill();
+                ctx.restore();
+            });
+
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = ft.alpha;
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillStyle = ft.color;
+                ctx.textAlign = 'center';
+                ctx.fillText(ft.text, ft.x, ft.y);
+                ctx.restore();
+            });
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initSimulation();
+        gameLoop();
+    </script>
+</body>
+</html>

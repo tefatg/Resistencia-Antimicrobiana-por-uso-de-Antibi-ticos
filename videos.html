@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos Informativos - Resistencia Antimicrobiana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1c355e',
+                            navyDark: '#132543',
+                            blue: '#468ee5',
+                            blueHover: '#3378d1',
+                            slateBg: '#dbe3ed',
+                            cardBg: '#cdd9e8',
+                            slideBg: '#ffffff',
+                            textDark: '#1c355e',
+                            textMuted: '#526685'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg-main: #dbe3ed;
+            --card-bg: #ffffff;
+            --card-wrapper: #cdd9e8;
+            --header-bg: #1c355e;
+            --nav-bg: #132543;
+            --text-dark: #1c355e;
+            --text-muted: #526685;
+            --accent-blue: #468ee5;
+            --accent-hover: #3378d1;
+        }
+
+        /* Ocultar barra de desplazamiento */
+        html, body {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        ::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 1100px;
+            width: 100%;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* Banner Hero */
+        .hero-banner {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 38px;
+            line-height: 1.15;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .hero-banner h1 span {
+            color: var(--accent-blue);
+            display: block;
+        }
+
+        .hero-banner p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 680px;
+        }
+
+        /* Contenedores Principales estilo App */
+        .app-card-wrapper {
+            background-color: var(--card-wrapper);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(28, 53, 94, 0.05);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(28, 53, 94, 0.1);
+        }
+
+        .category-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        /* Badges Ovalados */
+        .badge-pill {
+            display: inline-block;
+            padding: 6px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: var(--header-bg);
+            color: #ffffff;
+            border-radius: 50px;
+        }
+
+        /* Rejilla de Videos */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* Tarjetas Blancas de Contenido */
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(28, 53, 94, 0.12);
+        }
+
+        /* Contenedores de Embeds */
+        .embed-container-yt {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .embed-container-yt iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .embed-container-tt {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            background-color: #f8fafc;
+            min-height: 380px;
+        }
+
+        .embed-container-tt iframe {
+            border: 0;
+            border-radius: 12px;
+            max-width: 325px;
+            width: 100%;
+            height: 480px;
+        }
+
+        /* Información del Video */
+        .video-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .platform-tag {
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent-blue);
+        }
+
+        .video-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .video-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Botón Estilo Principal */
+        .btn-action {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 14px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(70, 142, 229, 0.35);
+        }
+
+        .btn-action:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .footer-action {
+            text-align: center;
+            margin: 20px 0 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner h1 { font-size: 28px; }
+            .app-card-wrapper { padding: 16px; }
+            .category-title { font-size: 16px; }
+        }
+    </style>
+</head>
+<body class="bg-brand-slateBg text-brand-navy font-sans min-h-screen flex flex-col justify-between overflow-x-hidden w-full">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <header class="sticky top-0 z-50 w-full bg-brand-navy shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <div class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                    <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[7px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </div>
+
+                <nav class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">CENTROS DE AYUDA</a>
+                </nav>
+
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-container">
+
+        <!-- BANNER CABECERA -->
+        <div class="hero-banner">
+            <h1>
+                Videoteca Educativa
+                <span>Aprende Sobre la Resistencia Antimicrobiana</span>
+            </h1>
+            <p>
+                Explora nuestra selección de videos explicativos e informativos sobre el uso correcto de antibióticos y las implicaciones de la resistencia bacteriana.
+            </p>
+        </div>
+
+        <!-- CATEGORÍA 1 -->
+        <section class="app-card-wrapper">
+            <div class="category-header">
+                <h2 class="category-title">🧪 01. Los Antibióticos y su Funcionamiento</h2>
+                <span class="badge-pill">Educación Base</span>
+            </div>
+            <div class="video-grid">
+                
+                <article class="video-card">
+                    <div class="embed-container-yt">
+                        <iframe src="https://www.youtube.com/embed/3JnSS5AvUbM" title="Cómo funcionan los antibióticos" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">YouTube // Explicación Médica</span>
+                        <h3 class="video-title">¿Cómo actúan realmente los Antibióticos?</h3>
+                        <p class="video-desc">Animación interactiva que explica cómo los medicamentos destruyen la pared celular de las bacterias sin perjudicar al organismo.</p>
+                    </div>
+                </article>
+
+                <article class="video-card">
+                    <div class="embed-container-tt">
+                        <iframe src="https://www.tiktok.com/embed/v2/7635773309874883853" allow="encrypted-media;"></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">TikTok // Micro-Aprende</span>
+                        <h3 class="video-title">Bacterias vs. Virus en 60 Segundos</h3>
+                        <p class="video-desc">Breve explicación visual sobre por qué un antibiótico no es efectivo para tratar infecciones de origen viral como el resfriado.</p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- CATEGORÍA 2 -->
+        <section class="app-card-wrapper">
+            <div class="category-header">
+                <h2 class="category-title">⚠️ 02. El Impacto de la Automedicación</h2>
+                <span class="badge-pill" style="background-color: var(--accent-blue);">Salud Pública</span>
+            </div>
+            <div class="video-grid">
+
+                <article class="video-card">
+                    <div class="embed-container-yt">
+                        <iframe src="https://www.youtube.com/embed/ddNBWqoJE_Y" title="Peligros de tomar antibióticos sin receta" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">YouTube // Reportaje</span>
+                        <h3 class="video-title">Peligros de Tomar Antibióticos sin Receta</h3>
+                        <p class="video-desc">Un análisis sobre las consecuencias de interrumpir o iniciar tratamientos con antibióticos por cuenta propia.</p>
+                    </div>
+                </article>
+
+                <article class="video-card">
+                    <div class="embed-container-tt">
+                        <iframe src="https://www.tiktok.com/embed/v2/7361157418635496709" allow="encrypted-media;"></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">TikTok // Recomendaciones</span>
+                        <h3 class="video-title">Errores al tomar antibióticos</h3>
+                        <p class="video-desc">Se dan 3 recomendaciones acerca de la ingesta adecuada de antibióticos.</p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- CATEGORÍA 3 -->
+        <section class="app-card-wrapper">
+            <div class="category-header">
+                <h2 class="category-title">🧬 03. Resistencia Bacteriana y Superbacterias</h2>
+                <span class="badge-pill" style="background-color: #132543;">Amenaza Global</span>
+            </div>
+            <div class="video-grid">
+
+                <article class="video-card">
+                    <div class="embed-container-yt">
+                        <iframe src="https://www.youtube.com/embed/J9iyKHxTS44" title="Resistencia a los antibióticos" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">YouTube // Ciencia Global</span>
+                        <h3 class="video-title">Superbacterias: ¿la próxima pandemia?</h3>
+                        <p class="video-desc">Reportaje del abuso de antibióticos que ha facilitado la resistencia de bacterias que prometen ser una grave amenaza.</p>
+                    </div>
+                </article>
+
+                <article class="video-card">
+                    <div class="embed-container-tt">
+                        <iframe src="https://www.tiktok.com/@proyecto.cotard2/video/7493672198461246775?is_from_webapp=1&sender_device=pc" allow="encrypted-media;"></iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="platform-tag">TikTok // ¿Sabías qué?</span>
+                        <h3 class="video-title">Una simple infección podría volverse mortal en un futuro.</h3>
+                        <p class="video-desc">La resistencia antimicrobiana avanza más rápido de lo que crees. </p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ACCIÓN CENTRAL -->
+        <div class="footer-action">
+            <a href="simulador.html" class="btn-action">IR AL SIMULADOR TÁCTICO 🔬</a>
+        </div>
+
+    </main>
+
+    <footer class="w-full border-t border-slate-300 py-6 text-center text-xs text-brand-textMuted bg-white/40 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Feria de Ciencias</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+
+</body>
+</html>

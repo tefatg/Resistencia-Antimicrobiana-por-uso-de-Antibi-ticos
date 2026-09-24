@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción Divulgativa // RAM</title>
+    
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS y Recursos Externos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1B335A',
+                            navyDark: '#122340',
+                            blue: '#468ee5',
+                            bgMain: '#DCE4EE',
+                            cardWrapper: '#C9D6E4',
+                            cardBg: '#FFFFFF',
+                            textDark: '#1B335A',
+                            textMuted: '#64748B'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #DCE4EE;
+            --card-bg: #FFFFFF;
+            --card-wrapper: #C9D6E4;
+            --header-bg: #1B335A;
+            --nav-dark: #122340;
+            --text-dark: #1B335A;
+            --text-muted: #64748B;
+            --accent-red: #D93838;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 48px 32px;
+            box-sizing: border-box;
+        }
+
+        /* Ocultar barras de desplazamiento */
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        html, body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .hero-banner {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 48px auto;
+        }
+
+        .hero-banner h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 38px;
+            line-height: 1.15;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .hero-banner p {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0 auto;
+            max-width: 680px;
+        }
+
+        .app-card-wrapper {
+            background-color: var(--card-wrapper);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 48px;
+            box-shadow: 0 4px 20px rgba(27, 51, 90, 0.05);
+        }
+
+        .app-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 40px 32px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            padding: 6px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            background-color: var(--header-bg);
+            color: #FFFFFF;
+            border-radius: 50px;
+            margin-bottom: 20px;
+        }
+
+        .app-card h2, .app-card h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0 0 14px 0;
+            line-height: 1.2;
+        }
+
+        .app-card h2 { font-size: 28px; }
+        .app-card h3 { font-size: 22px; }
+
+        .app-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 620px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--header-bg);
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(27, 51, 90, 0.15);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--nav-dark);
+            transform: translateY(-1px);
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 48px 0 24px 0;
+        }
+
+        .section-header h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: var(--text-dark);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .grid-3 .app-card-wrapper {
+            margin-bottom: 0;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .microbes-container {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            width: 100%;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .microbe-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .microbe {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 15px rgba(27, 51, 90, 0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .microbe:hover { transform: scale(1.08); }
+
+        .bac { background: radial-gradient(circle, #DCE4EE, #64748B); border: 3px dashed #1B335A; }
+        .vir { background: radial-gradient(circle, #F8FAFC, #94A3B8); border-radius: 30% 70% 70% 30%; border: 3px solid #1B335A; }
+        .fun { background: radial-gradient(circle, #E2E8F0, #475569); border: 3px double #122340; }
+
+        .microbe-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .microbe-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .eskape-grid {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0 28px 0;
+            width: 100%;
+        }
+
+        .eskape-item {
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 12px 16px;
+            flex: 1 1 130px;
+            text-align: center;
+        }
+
+        .eskape-item strong {
+            display: block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            color: var(--accent-red);
+        }
+
+        .eskape-item span {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--card-wrapper);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #FFFFFF;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            font-size: 13.5px;
+        }
+
+        th {
+            background-color: var(--header-bg);
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) { background-color: #F8FAFC; }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 24px 16px; }
+            .hero-banner h1 { font-size: 28px; }
+            .app-card h2 { font-size: 22px; }
+            .app-card-wrapper { padding: 16px; margin-bottom: 24px; }
+            .app-card { padding: 24px 16px; }
+            .grid-3 { gap: 16px; margin-bottom: 24px; }
+        }
+    </style>
+</head>
+<body class="bg-brand-bgMain text-brand-textDark font-sans min-h-screen flex flex-col justify-between overflow-x-hidden w-full">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (ANCHO COMPLETO) -->
+    <header class="sticky top-0 z-50 bg-brand-navy shadow-md w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo / Título de la Campaña -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow shrink-0">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block leading-tight">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1.5">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-container">
+
+        <!-- HEADER HERO -->
+        <div class="hero-banner">
+            <h1>Resistencia Antimicrobiana</h1>
+            <p>
+                La RAM ocurre cuando los microorganismos evolucionan y dejan de responder a los medicamentos. Comprender la estructura celular de cada patógeno es clave para aplicar tratamientos efectivos.
+            </p>
+        </div>
+
+        <!-- SECCIÓN 1: CARD DESTACADA -->
+        <div class="app-card-wrapper">
+            <div class="app-card">
+                <span class="badge-pill">PRUEBAS Y ESPECIFICIDAD</span>
+                <h2>¿Por qué los antibióticos solo atacan bacterias?</h2>
+                <p>
+                    Los antibióticos están diseñados para destruir componentes celulares exclusivos de las <strong>bacterias</strong> (como su pared celular de peptidoglicano). Los <strong>virus</strong> y <strong>hongos</strong> poseen estructuras distintas, haciendo que los antibióticos sean ineficaces contra ellos.
+                </p>
+
+                <div class="microbes-container">
+                    <div class="microbe-box">
+                        <div class="microbe bac"></div>
+                        <span class="microbe-label">Bacterias</span>
+                        <span class="microbe-desc">Sensibles a <strong>Antibióticos</strong></span>
+                    </div>
+                    <div class="microbe-box">
+                        <div class="microbe vir"></div>
+                        <span class="microbe-label">Virus</span>
+                        <span class="microbe-desc">Requieren <strong>Antivirales</strong></span>
+                    </div>
+                    <div class="microbe-box">
+                        <div class="microbe fun"></div>
+                        <span class="microbe-label">Hongos</span>
+                        <span class="microbe-desc">Requieren <strong>Antifúngicos</strong></span>
+                    </div>
+                </div>
+
+                <a href="simulador.html" class="btn-primary" style="margin-top: 10px;">PROBAR SIMULADOR INTERACTIVO</a>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 2: MECANISMOS -->
+        <div class="section-header">
+            <h2>Clasificación y Funcionamiento</h2>
+        </div>
+
+        <div class="grid-3">
+            <div class="app-card-wrapper">
+                <div class="app-card" style="height: 100%; justify-content: space-between;">
+                    <div>
+                        <span class="badge-pill">Pared Celular</span>
+                        <h3>Inhibición de Pared</h3>
+                        <p>Impiden la formación de la cubierta protectora, provocando la ruptura de la bacteria.</p>
+                        <p style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 0;">Fármacos: Penicilina, Amoxicilina.</p>
+                    </div>
+                    <img class="card-img" src="https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=600&q=80" alt="Medicamentos">
+                </div>
+            </div>
+
+            <div class="app-card-wrapper">
+                <div class="app-card" style="height: 100%; justify-content: space-between;">
+                    <div>
+                        <span class="badge-pill">Proteínas</span>
+                        <h3>Síntesis Proteica</h3>
+                        <p>Se unen a los ribosomas bacterianos para bloquear la fabricación de proteínas vitales.</p>
+                        <p style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 0;">Fármacos: Azitromicina, Tetraciclinas.</p>
+                    </div>
+                    <img class="card-img" src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80" alt="Comprimidos">
+                </div>
+            </div>
+
+            <div class="app-card-wrapper">
+                <div class="app-card" style="height: 100%; justify-content: space-between;">
+                    <div>
+                        <span class="badge-pill">Material Genético</span>
+                        <h3>Replicación ADN</h3>
+                        <p>Inhiben las enzimas encargadas de duplicar el ADN bacteriano, frenando su reproducción.</p>
+                        <p style="font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 0;">Fármacos: Ciprofloxacino, Levofloxacino.</p>
+                    </div>
+                    <img class="card-img" src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80" alt="Investigación">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: GRUPO ESKAPE -->
+        <div class="app-card-wrapper">
+            <div class="app-card" style="align-items: stretch;">
+                <span class="badge-pill" style="background-color: var(--accent-red); align-self: center;">ALTA PRIORIDAD SANITARIA</span>
+                <h2 style="text-align: center;">Patógenos del Grupo ESKAPE</h2>
+                <p style="text-align: center; margin: 0 auto 20px auto;">
+                    Bacterias de alta prioridad con capacidad comprobada para desarrollar resistencia a múltiples fármacos:
+                </p>
+
+                <div class="eskape-grid">
+                    <div class="eskape-item"><strong>E</strong><span>Enterococcus faecium</span></div>
+                    <div class="eskape-item"><strong>S</strong><span>Staphylococcus aureus</span></div>
+                    <div class="eskape-item"><strong>K</strong><span>Klebsiella pneumoniae</span></div>
+                    <div class="eskape-item"><strong>A</strong><span>Acinetobacter baumannii</span></div>
+                    <div class="eskape-item"><strong>P</strong><span>Pseudomonas aeruginosa</span></div>
+                    <div class="eskape-item"><strong>E</strong><span>Enterobacter spp.</span></div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Especie Bacteriana</th>
+                                <th>Mecanismo de Resistencia</th>
+                                <th>Cuadro Clínico Habitual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>S. aureus (MRSA)</strong></td>
+                                <td>Modificación del sitio blanco</td>
+                                <td>Infecciones severas de piel y sangre</td>
+                            </tr>
+                            <tr>
+                                <td><strong>K. pneumoniae</strong></td>
+                                <td>Producción de carbapenemasas</td>
+                                <td>Infecciones respiratorias e intrahospitalarias</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P. aeruginosa</strong></td>
+                                <td>Bombas de expulsión y biofilms</td>
+                                <td>Infecciones en quemaduras y vías respiratorias</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: RESULTADOS ENCUESTA (GRÁFICAS ANIMADAS) -->
+        <div class="app-card-wrapper">
+            <div class="app-card" style="align-items: stretch;">
+                <span class="badge-pill" style="align-self: center;">ESTADÍSTICAS Y DATOS</span>
+                <h2 style="text-align: center; margin-bottom: 24px;">Resultados Encuesta</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mb-4">
+                    
+                    <!-- Columna 1: Gráfica Malestar Leve + Texto -->
+                    <div class="flex flex-col items-center">
+                        <h3 class="text-xs sm:text-sm font-bold text-brand-navy mb-4 text-center">
+                            ¿Qué hace al tener un malestar de salud leve?
+                        </h3>
+                        <div class="w-full max-w-[260px] aspect-square mb-6">
+                            <canvas id="graficaMalestar"></canvas>
+                        </div>
+                        <div class="bg-slate-100 p-4 rounded-lg text-xs text-slate-700 leading-relaxed border border-slate-300">
+                            Esta conducta se agrava al revelar que un <strong>74%</strong> de las personas ignora que los antibióticos no actúan contra los hongos (un <strong>44.4%</strong> cree erróneamente que curan o reducen los síntomas y un <strong>29.6%</strong> lo desconoce), y únicamente el <strong>25.9%</strong> comprende que carecen de efecto frente a infecciones fúngicas.
+                        </div>
+                    </div>
+
+                    <!-- Columna 2: Texto Cuadro Azul + Gráfica Hongos -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-brand-navyDark text-white p-4 rounded-lg text-xs leading-relaxed mb-6 border border-brand-navy w-full">
+                            La investigación evidencia un problema central de desinformación y comportamiento: el <strong>45.1%</strong> de la población recurre a la automedicación frente a malestares leves, mientras que solo un <strong>14.6%</strong> acude al médico.
+                        </div>
+                        
+                        <h3 class="text-xs sm:text-sm font-bold text-brand-navy mb-4 text-center">
+                            Efecto de los antibióticos ante infecciones causadas por hongos
+                        </h3>
+                        <div class="w-full max-w-[260px] aspect-square">
+                            <canvas id="graficaHongos"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- MENSAJE FINAL -->
+        <div class="app-card-wrapper">
+            <div class="app-card" style="background-color: var(--header-bg); color: #FFFFFF;">
+                <h2 style="color: #FFFFFF;">Uso Responsable de Medicamentos</h2>
+                <p style="color: #DCE4EE; max-width: 700px;">
+                    La automedicación o la interrupción anticipada de un tratamiento favorece la supervivencia de bacterias resistentes. Consume antibióticos solo con receta médica y completa siempre el tiempo indicado.
+                </p>
+                <a href="recomendaciones.html" class="btn-primary" style="background-color: #FFFFFF; color: var(--header-bg);">VER RECOMENDACIONES</a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="w-full relative z-10 border-t border-slate-300 py-6 text-center text-xs text-brand-textMuted bg-white/40 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Investigación Educativa</p>
+    </footer>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD -->
+    <script>
+        // Inicializar íconos Lucide
+        lucide.createIcons();
+
+        // Lógica de apertura/cierre del Menú Móvil
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Configuración e inicialización de Chart.js
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Gráfica 1: Malestar Leve
+            const ctx1 = document.getElementById('graficaMalestar')?.getContext('2d');
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                        labels: [
+                            'Me automedico (45.1%)',
+                            'Espero a que pase (25.6%)',
+                            'Consulto farmacia (14.6%)',
+                            'Acudo al médico (14.6%)'
+                        ],
+                        datasets: [{
+                            data: [45.1, 25.6, 14.6, 14.6],
+                            backgroundColor: ['#2b4c7e', '#6f8ab7', '#c8cecd', '#122340'],
+                            borderWidth: 1.5,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true,
+                            duration: 2000,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 10, family: 'Inter' }, boxWidth: 10 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfica 2: Efecto en Hongos
+            const ctx2 = document.getElementById('graficaHongos')?.getContext('2d');
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: 'pie',
+                    data: {
+                        labels: [
+                            'Curará o reducirá (44.4%)',
+                            'Sin efecto (25.9%)',
+                            'No lo sé (29.6%)'
+                        ],
+                        datasets: [{
+                            data: [44.4, 25.9, 29.6],
+                            backgroundColor: ['#122340', '#7ac4ff', '#4a72a6'],
+                            borderWidth: 1.5,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true,
+                            duration: 2200,
+                            easing: 'easeOutQuart'
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { size: 10, family: 'Inter' }, boxWidth: 10 }
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

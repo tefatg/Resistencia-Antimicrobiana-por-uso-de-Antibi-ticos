@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resistencia Antimicrobiana - Campaña Educativa</title>
+    
+    <!-- Scripts & Fuentes Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Configuración Personalizada de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1c355e',       /* Azul marino oscuro */
+                            navyDark: '#132543',   /* Azul marino profundo */
+                            blue: '#468ee5',       /* Azul brillante */
+                            blueHover: '#3378d1',  /* Hover de botones */
+                            slateBg: '#dbe3ed',    /* Fondo claro */
+                            cardBg: '#cdd9e8',     /* Fondo marco carrusel */
+                            slideBg: '#ffffff',    /* Tarjetas blancas */
+                            textDark: '#1c355e',   /* Texto principal */
+                            textMuted: '#526685'  /* Texto secundario */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Estilos Adicionales -->
+    <style>
+        .carousel-card-shadow {
+            box-shadow: 0 15px 35px -5px rgba(28, 53, 94, 0.12), 0 8px 15px -6px rgba(28, 53, 94, 0.08);
+        }
+        .slide-shadow {
+            box-shadow: 0 10px 25px -3px rgba(28, 53, 94, 0.08), 0 4px 6px -2px rgba(28, 53, 94, 0.04);
+        }
+
+        /* FUERZA EL MARGEN LATERAL DE 2 CM EN TODAS LAS PANTALLAS */
+        .content-container {
+            padding-left: 2cm !important;
+            padding-right: 2cm !important;
+            max-width: 1100px; /* Límite de ancho unificado */
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .content-container {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-brand-slateBg text-brand-navy font-sans min-h-screen flex flex-col justify-between overflow-x-hidden relative">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <header class="sticky top-0 z-50 bg-brand-navy shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo / Título de la Campaña -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL APLICANDO LA CLASE .content-container -->
+    <main class="relative z-10 flex-grow w-full max-w-7xl mx-auto px-6 sm:px-8 py-10 md:py-14 flex flex-col items-center justify-center space-y-12">
+        
+        <!-- SECCIÓN HERO DESTACADA -->
+        <section class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            <!-- Columna Izquierda: Texto y Botones -->
+            <div class="lg:col-span-6 text-left">
+                <span class="inline-block px-3.5 py-1 rounded-full bg-brand-navy/10 text-brand-navy text-xs font-bold uppercase tracking-widest mb-4">
+                    Investigación Educativa 2026
+                </span>
+                <h1 class="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-brand-navy leading-none mb-5 tracking-tight">
+                    El futuro de los antibióticos está en juego
+                </h1>
+                <p class="text-brand-textMuted text-sm sm:text-base leading-relaxed mb-6">
+                    El uso incorrecto de medicamentos está generando bacterias resistentes. Explora los datos de nuestra investigación escolar, analiza los resultados de laboratorio e interactúa con el simulador.
+                </p>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="simulador.html" class="px-6 py-3 rounded-xl bg-brand-navy hover:bg-brand-navyDark text-white font-bold text-xs sm:text-sm tracking-wider uppercase shadow-md transition transform hover:-translate-y-0.5">
+                        Probar Simulador
+                    </a>
+                    <a href="introduccion.html" class="px-6 py-3 rounded-xl bg-white/80 hover:bg-white text-brand-navy font-bold text-xs sm:text-sm tracking-wider uppercase border border-slate-300 shadow-sm transition">
+                        Ver Resultados
+                    </a>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Imagen Principal -->
+            <div class="lg:col-span-6 relative">
+                <div class="relative rounded-3xl overflow-hidden shadow-xl border-4 border-white/60 bg-white">
+                    <img 
+                        src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=80" 
+                        alt="Investigación de Resistencia Antimicrobiana" 
+                        class="w-full h-[260px] sm:h-[340px] object-cover hover:scale-105 transition-transform duration-700"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/60 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-5 left-5 right-5 text-white">
+                        <p class="text-[11px] font-semibold uppercase tracking-widest text-brand-blue">Experimentos en Placa Petri</p>
+                        <p class="text-xs sm:text-sm font-medium opacity-90">Evaluación experimental de acción bacteriana vs. fúngica</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- CONTENEDOR DEL CARRUSEL DE DATOS -->
+        <div class="relative w-full">
+            <div class="relative bg-brand-cardBg/80 backdrop-blur-sm rounded-3xl p-6 sm:p-10 md:p-12 carousel-card-shadow border border-white/40">
+                
+                <!-- Botón Flecha Izquierda -->
+                <button id="prev-slide" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-brand-navy/80 hover:bg-brand-navy text-white flex items-center justify-center transition shadow-lg focus:outline-none" aria-label="Anterior">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Botón Flecha Derecha -->
+                <button id="next-slide" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-brand-navy/80 hover:bg-brand-navy text-white flex items-center justify-center transition shadow-lg focus:outline-none" aria-label="Siguiente">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Área de Diapositivas Interna -->
+                <div id="carousel-slides" class="relative min-h-[250px] sm:min-h-[230px] flex items-center justify-center">
+                    
+                    <!-- Diapositiva 1: Pruebas de Laboratorio -->
+                    <div class="carousel-slide transition-all duration-500 ease-in-out w-full max-w-2xl opacity-100 scale-100 bg-brand-slideBg rounded-2xl p-6 sm:p-8 text-center slide-shadow border border-slate-100">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-brand-navy text-white text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3">
+                            PRUEBAS DE LABORATORIO
+                        </div>
+                        <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-brand-navy mb-3 leading-snug">
+                            Los antibióticos solo atacan bacterias
+                        </h2>
+                        <p class="text-brand-textMuted text-xs sm:text-sm leading-relaxed mb-6">
+                            Se demostró experimentalmente que la amoxicilina es ineficaz contra levaduras, mohos y champiñones, pero efectiva en bacterias lácticas.
+                        </p>
+                        <div>
+                            <a href="simulador.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold uppercase text-xs tracking-wider shadow-md transition transform hover:-translate-y-0.5">
+                                PROBAR SIMULADOR
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Diapositiva 2: Resultados de Encuesta -->
+                    <div class="carousel-slide hidden transition-all duration-500 ease-in-out w-full max-w-2xl opacity-0 scale-95 bg-brand-slideBg rounded-2xl p-6 sm:p-8 text-center slide-shadow border border-slate-100">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-brand-navy text-white text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3">
+                            RESULTADOS DE ENCUESTA
+                        </div>
+                        <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-brand-navy mb-3 leading-snug">
+                            El <span class="text-brand-blue">45.1%</span> de las personas se automedica
+                        </h2>
+                        <p class="text-brand-textMuted text-xs sm:text-sm leading-relaxed mb-6">
+                            Además, un <strong>74.1% desconoce</strong> que los antibióticos no actúan contra infecciones fúngicas (hongos) ni virales. ¡Informarse salva vidas!
+                        </p>
+                        <div>
+                            <a href="articulos.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold uppercase text-xs tracking-wider shadow-md transition transform hover:-translate-y-0.5">
+                                VER ARTÍCULOS
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Diapositiva 3: Amenaza Global 2050 -->
+                    <div class="carousel-slide hidden transition-all duration-500 ease-in-out w-full max-w-2xl opacity-0 scale-95 bg-brand-slideBg rounded-2xl p-6 sm:p-8 text-center slide-shadow border border-slate-100">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-brand-navy text-white text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3">
+                            AMENAZA GLOBAL
+                        </div>
+                        <h2 class="font-heading font-extrabold text-2xl sm:text-3xl text-brand-navy mb-3 leading-snug">
+                            39 Millones de muertes proyectadas de ahora al 2050
+                        </h2>
+                        <p class="text-brand-textMuted text-xs sm:text-sm leading-relaxed mb-6">
+                            Las bacterias resistentes a medicamentos podrían convertirse en una de las principales causas de muerte en el mundo si no cambiamos nuestros hábitos hoy.
+                        </p>
+                        <div>
+                            <a href="recomendaciones.html" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold uppercase text-xs tracking-wider shadow-md transition transform hover:-translate-y-0.5">
+                                SABER MÁS
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Puntos Indicadores del Carrusel -->
+                <div class="mt-6 flex items-center justify-center gap-2" id="carousel-dots">
+                    <button class="dot w-7 h-2.5 rounded-full bg-brand-blue transition-all" data-slide="0" aria-label="Ir a diapositiva 1"></button>
+                    <button class="dot w-2.5 h-2.5 rounded-full bg-slate-400 hover:bg-brand-blue transition-all" data-slide="1" aria-label="Ir a diapositiva 2"></button>
+                    <button class="dot w-2.5 h-2.5 rounded-full bg-slate-400 hover:bg-brand-blue transition-all" data-slide="2" aria-label="Ir a diapositiva 3"></button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TARJETAS DE DATOS FLASH INFERIORES -->
+        <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <div class="bg-white/80 backdrop-blur p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-navy/10 text-brand-navy flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="microscope" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xs sm:text-sm text-brand-navy">Investigación Científica</h3>
+                    <p class="text-[11px] sm:text-xs text-brand-textMuted mt-0.5">Basado en experimentos prácticos en placa Petri.</p>
+                </div>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-blue/10 text-brand-blue flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xs sm:text-sm text-brand-navy">Encuesta Escolar</h3>
+                    <p class="text-[11px] sm:text-xs text-brand-textMuted mt-0.5">Muestra representativa de estudiantes y familias.</p>
+                </div>
+            </div>
+
+            <div class="bg-white/80 backdrop-blur p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-11 h-11 rounded-xl bg-brand-navy/10 text-brand-navy flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-heading font-bold text-xs sm:text-sm text-brand-navy">Uso Responsable</h3>
+                    <p class="text-[11px] sm:text-xs text-brand-textMuted mt-0.5">Promoviendo la prevención de superbacterias.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="relative z-10 border-t border-slate-300 py-6 text-center text-xs text-brand-textMuted bg-white/40 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Feria de Ciencias</p>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT DE NAVEGACIÓN Y CARRUSEL -->
+    <script>
+        lucide.createIcons();
+
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('#carousel-dots .dot');
+        const prevBtn = document.getElementById('prev-slide');
+        const nextBtn = document.getElementById('next-slide');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.remove('hidden', 'opacity-0', 'scale-95');
+                    slide.classList.add('opacity-100', 'scale-100');
+                } else {
+                    slide.classList.add('hidden', 'opacity-0', 'scale-95');
+                    slide.classList.remove('opacity-100', 'scale-100');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.remove('bg-slate-400', 'w-2.5');
+                    dot.classList.add('bg-brand-blue', 'w-7');
+                } else {
+                    dot.classList.add('bg-slate-400', 'w-2.5');
+                    dot.classList.remove('bg-brand-blue', 'w-7');
+                }
+            });
+
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prev);
+        }
+
+        function startAutoPlay() {
+            slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(slideInterval);
+            startAutoPlay();
+        }
+
+        if (nextBtn && prevBtn) {
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoPlay();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoPlay();
+            });
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+                resetAutoPlay();
+            });
+        });
+
+        showSlide(0);
+        startAutoPlay();
+    </script>
+</body>
+</html>

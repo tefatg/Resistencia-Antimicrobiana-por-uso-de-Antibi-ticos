@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Microbiológica - Resistencia Antimicrobiana</title>
+    
+    <!-- Fuentes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS y Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#1B335A',
+                            navyDark: '#122340',
+                            blue: '#468ee5',
+                            bgMain: '#DCE4EE',
+                            cardWrapper: '#C9D6E4',
+                            cardBg: '#FFFFFF',
+                            textDark: '#1B335A',
+                            textMuted: '#64748B',
+                            border: '#8ca2bf'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #d9e2ec;
+            --panel-bg: #ffffff;
+            --header-bg: #1c335a;
+            --nav-bg: #122340;
+            --panel-border: #8ca2bf;
+            --text-dark: #1c335a;
+            --text-muted: #5a738e;
+            --accent-blue: #4a90e2;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Ocultar barra de desplazamiento */
+        html::-webkit-scrollbar, body::-webkit-scrollbar {
+            display: none;
+        }
+        html, body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .main-content {
+            padding: 32px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1100px;
+            flex: 1;
+        }
+
+        /* Marcos estilo Fotografía / Galería Cuadrada */
+        .photo-card {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(28, 51, 90, 0.2);
+        }
+
+        /* Área interna de la imagen en formato 1:1 */
+        .photo-frame {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle, #122340 0%, #070d18 100%);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Bordes sutiles en la gama de azules */
+        .border-cyan { border: 2px solid #22d3ee; }
+        .border-blue { border: 2px solid #3b82f6; }
+        .border-indigo { border: 2px solid #818cf8; }
+        .border-sky { border: 2px solid #38bdf8; }
+        .border-teal { border: 2px solid #14b8a6; }
+        .border-navy { border: 2px solid #4a90e2; }
+
+        .photo-caption {
+            padding-top: 10px;
+            padding-bottom: 2px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-brand-bgMain text-brand-textDark font-sans min-h-screen flex flex-col justify-between overflow-x-hidden w-full">
+
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR (ANCHO COMPLETO) -->
+    <header class="sticky top-0 z-50 w-full bg-brand-navy shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- Logo / Título de la Campaña -->
+                <a href="index.html" class="flex items-center gap-3 cursor-pointer">
+                    <div class="w-9 h-9 rounded-lg bg-brand-blue flex items-center justify-center text-white shadow shrink-0">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="font-heading font-extrabold text-base sm:text-lg tracking-wider text-white block leading-tight">
+                            RESISTENCIA ANTIMICROBIANA
+                        </span>
+                        <span class="block text-[6px] font-semibold text-brand-blue tracking-widest uppercase">CAMPAÑA INFORMATIVA</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden lg:flex items-center gap-1.5">
+                    <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INICIO</a>
+                    <a href="introduccion.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">INTRODUCCIÓN</a>
+                    <a href="videos.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">VIDEOS INFORMATIVOS</a>
+                    <a href="imagenes.html" class="px-3.5 py-1.5 text-xs font-bold text-white bg-brand-navyDark rounded transition uppercase tracking-wider">IMÁGENES</a>
+                    <a href="articulos.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">ARTÍCULOS</a>
+                    <a href="simulador.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">SIMULADOR</a>
+                    <a href="recomendaciones.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider">RECOMENDACIONES</a>
+                    <a href="centros.html" class="px-3 py-1 text-xs font-semibold text-slate-200 hover:text-white hover:bg-brand-navyDark/60 rounded transition uppercase tracking-wider leading-tight text-center">CENTROS DE AYUDA</a>
+                </nav>
+
+                <!-- Botón Menú Móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-200 hover:text-white hover:bg-brand-navyDark focus:outline-none" aria-label="Abrir menú">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-brand-navy border-t border-brand-navyDark px-4 pt-2 pb-4 space-y-1">
+            <a href="index.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INICIO</a>
+            <a href="introduccion.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">INTRODUCCIÓN</a>
+            <a href="videos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">VIDEOS INFORMATIVOS</a>
+            <a href="imagenes.html" class="block px-3 py-2 text-sm font-bold text-white bg-brand-navyDark rounded">IMÁGENES</a>
+            <a href="articulos.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">ARTÍCULOS</a>
+            <a href="simulador.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">SIMULADOR</a>
+            <a href="recomendaciones.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">RECOMENDACIONES</a>
+            <a href="centros.html" class="block px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-brand-navyDark rounded">CENTROS DE AYUDA</a>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+        
+        <!-- Encabezado de Sección -->
+        <div class="w-full mb-8 text-center sm:text-left">
+            <div class="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                <i data-lucide="images" class="w-6 h-6 text-brand-navy"></i>
+                <h2 class="font-heading text-2xl sm:text-3xl font-black text-brand-navy tracking-tight uppercase">
+                    Galería de Microbiología
+                </h2>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 font-medium">
+                Registro visual de estructuras microbianas, cultivos de laboratorio y mecanismos de resistencia.
+            </p>
+        </div>
+
+        <!-- Grid de Galería (12 Fotografías) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
+            
+            <!-- Foto 1 -->
+            <div class="photo-card">
+                <div class="photo-frame border-cyan">
+                    <img src="https://media.istockphoto.com/id/1296453957/es/foto/c%C3%A9lulas-bacterianas-en-la-mancha-de-gram.jpg?s=612x612&w=0&k=20&c=n7teGhFAQhWbkMgP7ImwjyLZk0Kb9_ejp1zxnzFwwPw=" alt="Bacteria Gram-Negativa">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Bacteria Gram-Negativa</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Microscopía electrónica</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Fotografía ampliada que muestra bacterias con forma de bastón.</p>
+                </div>
+            </div>
+
+            <!-- Foto 2 -->
+            <div class="photo-card">
+                <div class="photo-frame border-blue">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC3jDZNcSAAr7svDwVd1xe-ihULRpYHRTe6OsvA8BV6db2ILV_dXrktJ3g&s=10" alt="Estructura Filamentosa">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Estructura Filamentosa</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Crecimiento de hifas</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Muestra de hongos microscópicos creciendo en forma de hilos.</p>
+                </div>
+            </div>
+
+            <!-- Foto 3 -->
+            <div class="photo-card">
+                <div class="photo-frame border-indigo">
+                    <img src="https://en-mx.ecolab.com/-/media/Widen/Food-Beverage/Food-Processing/03STAGE_Biofilm-Webpage_081120_Crop_550x310.jpg" alt="Formación de Biofilm">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Formación de Biofilm</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Matriz defensiva</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Capa protectora que fabrican las bacterias para defenderse.</p>
+                </div>
+            </div>
+
+            <!-- Foto 4 -->
+            <div class="photo-card">
+                <div class="photo-frame border-sky">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnWppEmEFqyGIFuu8OHAAMFclc7o0Ieh-G3457tEA89HNmIO_VHrnHEhY&s=10" alt="Plásmido Resistente">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Plásmido Resistente</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Transferencia de genes</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Fragmento de ADN que las bacterias comparten entre sí.</p>
+                </div>
+            </div>
+
+            <!-- Foto 5 -->
+            <div class="photo-card">
+                <div class="photo-frame border-teal">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1uN5hi689IypkWFEk6Ky6luu9D00tDEnJlA7jmdJNsg&s=10" alt="Staphylococcus aureus">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Staphylococcus aureus</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Agrupación en racimo</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Bacterias redondas agrupadas como un racimo de uvas.</p>
+                </div>
+            </div>
+
+            <!-- Foto 6 -->
+            <div class="photo-card">
+                <div class="photo-frame border-navy">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrQnHr9boANndy9E29fUNjXZWmf2sQJRIpJ6BpfT8SgdReqT85ZDEx3bQ&s=10" alt="Antibiograma">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Antibiograma</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Zona de inhibición</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Prueba para evaluar qué antibiótico frena al microbio.</p>
+                </div>
+            </div>
+
+            <!-- Foto 7 -->
+            <div class="photo-card">
+                <div class="photo-frame border-cyan">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMNyvK9H1rYHkr1KfS8VQlaYaNuEzilZqp2tp9bg54hz7pMCFBS8M1SqU&s=10" alt="Secuenciación Genómica">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Secuenciación Genómica</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Detección de mutaciones</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Análisis del genoma para ubicar cambios de resistencia.</p>
+                </div>
+            </div>
+
+            <!-- Foto 8 -->
+            <div class="photo-card">
+                <div class="photo-frame border-indigo">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvao5Vv0dHuWxR1DNritoTSUDt_af-TceyqUDo8uVhkk9pWb4jYtjj6VT2&s=10" alt="Bacteriófagos">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Bacteriófagos</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Terapia viral dirigida</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Virus dirigidos a atacar bacterias específicas.</p>
+                </div>
+            </div>
+
+            <!-- Foto 9 -->
+            <div class="photo-card">
+                <div class="photo-frame border-sky">
+                    <img src="https://media.istockphoto.com/id/109726331/es/foto/una-mano-sostiene-placa-de-petri-con-cultivo-de-bacterias.jpg?s=612x612&w=0&k=20&c=ix8jxgACvMBWJLvsfjxet283qP2JdH2wxTm5EG_Zv6k=" alt="Caja de Petri">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Caja de Petri</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Aislamiento bacteriano</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Placa de laboratorio para el crecimiento microbiano.</p>
+                </div>
+            </div>
+
+            <!-- Foto 10 -->
+            <div class="photo-card">
+                <div class="photo-frame border-teal">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjgm__lVaZDn3jgreovR4AH8_yp5Ez1lMHAJr57zEQxDKU0HXB-iELob0&s=10" alt="Concentración Mínima">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Concentración Mínima</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Ensayo de microdilución</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Medición de la dosis mínima efectiva del fármaco.</p>
+                </div>
+            </div>
+
+            <!-- Foto 11 -->
+            <div class="photo-card">
+                <div class="photo-frame border-teal">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtqGessZO3_o9FyS1GlLjJ71Nwgq4j-m6nKy_059OWug&s=10" alt="Halo de inhibición">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Halo de inhibición</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Medición del halo</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Espacio libre de bacterias.</p>
+                </div>
+            </div>
+
+            <!-- Foto 12 -->
+            <div class="photo-card">
+                <div class="photo-frame border-teal">
+                    <img src="https://www.lasanteca.com/userfiles/2018/12/AMOXICILINA-250MG-5ML-SUSPENCI%E2%80%A1N-100ML-CON-FRASCO.jpg" alt="Amoxicilina">
+                </div>
+                <div class="photo-caption">
+                    <h3 class="text-sm sm:text-base font-bold text-brand-navy truncate">Antibióticos</h3>
+                    <p class="text-xs font-semibold text-slate-600 truncate mb-1">Amoxicilina</p>
+                    <p class="text-[11px] text-slate-500 leading-tight">Fármaco que inhibe la pared celular de la bacteria.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="w-full relative z-10 border-t border-brand-border py-6 text-center text-xs text-brand-navy bg-white/60 backdrop-blur">
+        <p>© 2026 Campaña de Resistencia Antimicrobiana • Investigación Educativa</p>
+    </footer>
+
+    <!-- SCRIPTS DE INTERACTIVIDAD -->
+    <script>
+        // Inicializar íconos Lucide
+        lucide.createIcons();
+
+        // Lógica del menú desplegable móvil
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
